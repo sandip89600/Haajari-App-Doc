@@ -37,14 +37,10 @@ const Contact = () => {
     setStatus({ submitting: true, success: false, error: false, message: '' });
 
     try {
-      // Simulate form submission to a real endpoint or handle via mock Axios response
-      // We will post to a placeholder JSON endpoint to verify Axios works 100%
-      const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-        title: 'Haajari Help Center Contact Submission',
-        body: formData
-      });
+      // Send form details to the Nodemailer Express backend
+      const response = await axios.post('http://localhost:5000/api/contact', formData);
 
-      if (response.status === 201 || response.status === 200) {
+      if (response.status === 200) {
         setStatus({
           submitting: false,
           success: true,
@@ -132,8 +128,8 @@ const Contact = () => {
                 <div>
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Email Inquiry</h4>
                   <p className="text-sm font-semibold text-gray-700 dark:text-slate-200 mt-1">
-                    <a href="mailto:support@haajari.deepitlabs.in" className="hover:text-brand-orange transition">
-                      support@haajari.deepitlabs.in
+                    <a href="mailto:info.haajariapp@gmail.com" className="hover:text-brand-orange transition">
+                      info.haajariapp@gmail.com
                     </a>
                   </p>
                 </div>
@@ -147,7 +143,7 @@ const Contact = () => {
                 <div>
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Official Website</h4>
                   <p className="text-sm font-semibold text-gray-700 dark:text-slate-200 mt-1">
-                    <a href="https://haajari.deepitlabs.in" target="_blank" rel="noreferrer" className="hover:text-brand-orange transition">
+                    <a href="https://www.haajari.deepitlabs.in" target="_blank" rel="noreferrer" className="hover:text-brand-orange transition">
                       www.haajari.deepitlabs.in
                     </a>
                   </p>
@@ -162,7 +158,7 @@ const Contact = () => {
                 <div>
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Office Location</h4>
                   <p className="text-sm font-semibold text-gray-700 dark:text-slate-200 mt-1">
-                    Deep IT Labs, Pune, Maharashtra, India
+                    Nashik, Maharashtra, India
                   </p>
                 </div>
               </div>
@@ -208,14 +204,14 @@ const Contact = () => {
           {/* Google Maps Placeholder */}
           <div className="glass-card rounded-3xl overflow-hidden h-60 relative group shadow-sm border border-gray-100 dark:border-white/5">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121059.04360341774!2d73.79222627914902!3d18.52460359740523!2m3!1f0!2f0!3f0!3m2!1i1020!2i768!4f13.1!3m3!1m2!1s0x3bc2bf2e67461101%3A0x828a43bf9d9ee343!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1714578980123!5m2!1sen!2sin" 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d120015.42436402434!2d73.72260275820314!3d19.997274000000014!2m3!1f0!2f0!3f0!3m2!1i1020!2i768!4f13.1!3m3!1m2!1s0x3bddeedab08182cd%3A0xb51e1882860fe3!2sNashik%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1714578990123!5m2!1sen!2sin" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
               allowFullScreen="" 
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
-              title="Haajari Office Map Pune"
+              title="Haajari Office Map Nashik"
               className="grayscale contrast-125 dark:invert dark:opacity-80 transition duration-300"
             />
           </div>

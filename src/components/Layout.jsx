@@ -117,14 +117,6 @@ const Layout = ({ children }) => {
               {/* CTA Buttons */}
               <div className="hidden lg:flex items-center gap-2">
                 <a
-                  href="https://haajari.deepitlabs.in"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 text-xs font-semibold text-brand-navy dark:text-white hover:text-brand-orange transition"
-                >
-                  Login
-                </a>
-                <a
                   href="#download"
                   className="btn-primary py-2 px-4 text-xs flex items-center gap-1.5"
                 >
@@ -173,14 +165,6 @@ const Layout = ({ children }) => {
                   </NavLink>
                 ))}
                 <div className="pt-4 border-t border-gray-100 dark:border-white/5 flex flex-col gap-2">
-                  <a
-                    href="https://haajari.deepitlabs.in"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex justify-center items-center p-3 rounded-2xl font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-white/5 text-center transition"
-                  >
-                    Login
-                  </a>
                   <a
                     href="#download"
                     className="btn-primary w-full p-3 rounded-2xl flex justify-center items-center"
@@ -290,7 +274,7 @@ const Layout = ({ children }) => {
                 <li><Link to="/about" className="hover:text-brand-orange transition">About Us</Link></li>
                 <li><Link to="/blog" className="hover:text-brand-orange transition">Blog & Tutorials</Link></li>
                 <li><Link to="/help-center?category=troubleshooting" className="hover:text-brand-orange transition">Troubleshooting</Link></li>
-                <li><a href="https://haajari.deepitlabs.in" target="_blank" rel="noreferrer" className="hover:text-brand-orange transition">Official Site</a></li>
+                <li><a href="https://www.haajari.deepitlabs.in" target="_blank" rel="noreferrer" className="hover:text-brand-orange transition">Official Site</a></li>
               </ul>
             </div>
 

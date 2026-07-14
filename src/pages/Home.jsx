@@ -158,11 +158,18 @@ const Home = () => {
             transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap justify-center gap-4 pt-2"
           >
-            <Link to="/help-center" className="btn-primary">
+            <Link to="/features" className="btn-primary">
               Explore Features
               <HiArrowRight className="w-4 h-4" />
             </Link>
-            <a href="#waitlist" className="btn-secondary">
+            <a 
+              href="#waitlist" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="btn-secondary"
+            >
               Join Waitlist
             </a>
           </motion.div>
@@ -520,6 +527,10 @@ const Home = () => {
             </p>
             <a
               href="#waitlist"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="btn-primary inline-flex"
             >
               Join Waitlist

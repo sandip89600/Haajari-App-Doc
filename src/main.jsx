@@ -21,6 +21,24 @@ function Root() {
     return () => lenis.destroy();
   }, []);
 
+  useEffect(() => {
+    const handleHashRedirect = () => {
+      const hash = window.location.hash;
+      if (hash === '#waitlist' || hash === '#/waitlist') {
+        window.location.hash = '#/';
+        setTimeout(() => {
+          document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      } else if (hash === '#quick-help') {
+        window.location.hash = '#/quick-help';
+      }
+    };
+
+    handleHashRedirect();
+    window.addEventListener('hashchange', handleHashRedirect);
+    return () => window.removeEventListener('hashchange', handleHashRedirect);
+  }, []);
+
   return (
     <React.StrictMode>
       <App />

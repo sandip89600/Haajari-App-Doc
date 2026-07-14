@@ -53,14 +53,6 @@ const About = () => {
     }
   ];
 
-  const techStack = [
-    { name: 'React & Vite', desc: 'Fast, modular frontend interface framework', icon: HiCode },
-    { name: 'Tailwind CSS', desc: 'Custom configured utility styles for clean brand appearance', icon: HiTerminal },
-    { name: 'Framer Motion', desc: 'Rich fluid animations for user feedback and triggers', icon: FaRoad },
-    { name: 'Node.js & Express', desc: 'Highly scalable secure API servers and nodemailer relays', icon: HiDatabase },
-    { name: 'MongoDB', desc: 'Flexible worker database structures for offline-first syncing', icon: HiFolderOpen },
-    { name: 'AWS Cloud', desc: 'Distributed infrastructure ensuring 99.9% database uptime', icon: HiGlobeAlt }
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -222,33 +214,6 @@ const About = () => {
           </div>
         </div>
 
-        {/* Technology Stack */}
-        <div className="mb-20 text-center">
-          <span className="section-badge mb-3">Technology Stack</span>
-          <h2 className="section-heading mb-12 text-brand-navy dark:text-white">Built on Modern Architecture</h2>
-          
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
-          >
-            {techStack.map((tech, idx) => (
-              <motion.div
-                key={idx}
-                variants={itemVariants}
-                className="glass-card p-6 rounded-2xl border border-white/10 hover:border-brand-orange/30 transition duration-300"
-              >
-                <div className="w-10 h-10 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center mb-4">
-                  <tech.icon className="w-5 h-5" />
-                </div>
-                <h4 className="text-sm font-bold text-brand-navy dark:text-white mb-1">{tech.name}</h4>
-                <p className="text-[11px] text-gray-500 dark:text-slate-400 leading-relaxed">{tech.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
 
         {/* Bottom CTA */}
         <div className="text-center bg-white/50 dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-3xl p-10 md:p-14 max-w-4xl mx-auto shadow-sm">

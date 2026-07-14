@@ -1,12 +1,67 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  HiShieldCheck, HiOutlineSparkles, HiClock, HiTrendingUp, 
-  HiDatabase, HiDeviceMobile, HiCloud, HiPuzzle
-} from 'react-icons/hi';
-import Breadcrumbs from '../components/Breadcrumbs';
+import { HiShieldCheck, HiCloud, HiCurrencyRupee, HiCode, HiDatabase, HiGlobeAlt, HiTerminal, HiArrowRight, HiMap, HiFolderOpen } from 'react-icons/hi';
+import { FaBrain, FaBuilding, FaRoad } from 'react-icons/fa';
 
 const About = () => {
+  const problems = [
+    {
+      id: 'fraud',
+      title: 'Attendance Fraud',
+      description: 'Geofencing boundaries combined with photo verification eliminate proxy attendance and "buddy punching" entirely.',
+      icon: HiShieldCheck
+    },
+    {
+      id: 'paperwork',
+      title: 'Paper Register Loss',
+      description: 'Eliminate torn books and lost cards. All records are securely synced to the cloud, accessible offline on-site.',
+      icon: HiCloud
+    },
+    {
+      id: 'disputes',
+      title: 'Salary Disputes',
+      description: 'Automated wage calculation tracks daily rates, half-days, and overtime in real-time, eliminating wage reconciliation arguments.',
+      icon: HiCurrencyRupee
+    }
+  ];
+
+  const milestones = [
+    {
+      quarter: 'Q1 2026',
+      status: 'Done',
+      title: 'Material Requests Launch',
+      description: 'Released materials requesting modules allowing supervisors to place material orders directly from sites.'
+    },
+    {
+      quarter: 'Q3 2026',
+      status: 'Current',
+      title: 'AI Assistant & Regional Voice',
+      description: 'Enabling regional language support, voice instructions, and AI analytics to help contractors query salaries verbally.'
+    },
+    {
+      quarter: 'Q4 2026',
+      status: 'Upcoming',
+      title: 'ERP Integrations',
+      description: 'Adding seamless integrations with common accounting software such as Tally and Busy ERP for payroll auto-sync.'
+    },
+    {
+      quarter: 'Q2 2027',
+      status: 'Future',
+      title: 'Biometric Device Sync',
+      description: 'Syncing physical site biometric thumbprint or facial scanners directly into the Haajari cloud database.'
+    }
+  ];
+
+  const techStack = [
+    { name: 'React & Vite', desc: 'Fast, modular frontend interface framework', icon: HiCode },
+    { name: 'Tailwind CSS', desc: 'Custom configured utility styles for clean brand appearance', icon: HiTerminal },
+    { name: 'Framer Motion', desc: 'Rich fluid animations for user feedback and triggers', icon: FaRoad },
+    { name: 'Node.js & Express', desc: 'Highly scalable secure API servers and nodemailer relays', icon: HiDatabase },
+    { name: 'MongoDB', desc: 'Flexible worker database structures for offline-first syncing', icon: HiFolderOpen },
+    { name: 'AWS Cloud', desc: 'Distributed infrastructure ensuring 99.9% database uptime', icon: HiGlobeAlt }
+  ];
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -15,154 +70,199 @@ const About = () => {
     }
   };
 
-  const cardVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } }
+  const itemVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
   };
 
-  const techStack = [
-    { name: 'React JS & Vite', desc: 'Fast, modern rendering and light bundles.', icon: HiDeviceMobile, color: 'text-sky-500 bg-sky-55/50 dark:bg-sky-950/20' },
-    { name: 'Tailwind CSS', desc: 'Clean, utilities-first, responsive layouts.', icon: HiOutlineSparkles, color: 'text-teal-500 bg-teal-55/50 dark:bg-teal-950/20' },
-    { name: 'Framer Motion', desc: 'Sleek, physics-based micro-interactions.', icon: HiTrendingUp, color: 'text-brand-orange bg-brand-orange/10' },
-    { name: 'Node.js & MongoDB', desc: 'Scalable backend with redundant storage.', icon: HiDatabase, color: 'text-emerald-500 bg-emerald-55/50 dark:bg-emerald-950/20' },
-    { name: 'Cloud Infrastructure', desc: 'Hosted securely on AWS with high availability.', icon: HiCloud, color: 'text-blue-500 bg-blue-55/50 dark:bg-blue-950/20' },
-    { name: 'Third-Party Sync', desc: 'API connectivity with Tally and QuickBooks.', icon: HiPuzzle, color: 'text-indigo-500 bg-indigo-55/50 dark:bg-indigo-950/20' },
-  ];
-
-  const roadmapItems = [
-    { date: 'Q1 2026 (Completed)', title: 'Launch of Material Requests', desc: 'Enabled real-time cement, steel, and brick requests with approvals and photo verification.' },
-    { date: 'Q3 2026 (Current)', title: 'AI Assistant & Regional Voice', desc: 'Deploying regional voice synthesis (Hindi, Marathi, Telugu) for hands-free queries.' },
-    { date: 'Q4 2026 (Upcoming)', title: 'Accountant ERP Integrations', desc: 'One-click sync with standard billing software like Tally and Busy ERP.' },
-    { date: 'Q2 2027 (Future)', title: 'Biometric Devices Sync', desc: 'Direct IoT integration with physical on-site fingerprint and facial recognition scanners.' },
-  ];
-
   return (
-    <div className="space-y-12">
-      <Breadcrumbs />
-
-      {/* Header Banner */}
-      <section className="text-center max-w-3xl mx-auto space-y-4">
-        <motion.h1 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-sans font-extrabold text-3xl md:text-5xl text-brand-navy dark:text-white tracking-tight"
-        >
-          Our Story & Vision
-        </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-base md:text-lg text-gray-500 dark:text-slate-400 leading-relaxed"
-        >
-          Haajari App was built to replace offline paper registers with clean, automated, and secure digital timesheets.
-        </motion.p>
-      </section>
-
-      {/* Grid: What is Haajari & Problems Solved */}
-      <motion.section 
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6"
-      >
-        <motion.div variants={cardVariants} className="glass-card p-8 rounded-3xl space-y-4">
-          <h2 className="text-xl md:text-2xl font-bold text-brand-navy dark:text-white">What is Haajari App?</h2>
-          <p className="text-sm md:text-base text-gray-500 dark:text-slate-300 leading-relaxed">
-            Haajari App is a comprehensive workforce attendance, site progress, and salary calculation tool. It allows general contractors, developers, and field supervisors to log shifts, track advances (kharchi), and monitor material movements directly from their mobile phones.
+    <div className="bg-brand-grayBg dark:bg-brand-navyDeep transition-colors duration-300 py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Hero Section */}
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <span className="section-badge mb-3">Our Story</span>
+          <h1 className="section-heading mb-5">
+            Building the Future of <span className="gradient-text">Construction Management</span>
+          </h1>
+          <p className="section-subheading mx-auto">
+            Haajari App was built to bridge the gap between contractor offices and site activities. We digitize worker presence, protect payroll records, and power sites with AI.
           </p>
-          <p className="text-sm md:text-base text-gray-500 dark:text-slate-300 leading-relaxed">
-            Our goal is to build a high-trust platform that connects the construction office directly with workers in the field, reducing administrative overhead and error margins.
-          </p>
-        </motion.div>
-
-        <motion.div variants={cardVariants} className="glass-card p-8 rounded-3xl space-y-4">
-          <h2 className="text-xl md:text-2xl font-bold text-brand-navy dark:text-white">Why it was built & Problems Solved</h2>
-          <ul className="space-y-3.5 text-sm md:text-base text-gray-500 dark:text-slate-300">
-            <li className="flex items-start gap-2.5">
-              <HiShieldCheck className="w-5.5 h-5.5 text-brand-orange shrink-0 mt-0.5" />
-              <span><strong>Attendance Proxy:</strong> Geofencing and Photo Verification prevent buddy punching and fake logs.</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <HiShieldCheck className="w-5.5 h-5.5 text-brand-orange shrink-0 mt-0.5" />
-              <span><strong>Paper Loss:</strong> Traditional diaries get damaged or lost. Haajari stores everything safely on the cloud with offline logging support.</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <HiShieldCheck className="w-5.5 h-5.5 text-brand-orange shrink-0 mt-0.5" />
-              <span><strong>Disputed Balances:</strong> Real-time logging of wage payments and advances ensures clear balance reconciliation.</span>
-            </li>
-          </ul>
-        </motion.div>
-      </motion.section>
-
-      {/* Vision & Mission Banner */}
-      <section className="bg-brand-navy text-white rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-xl dark:bg-brand-navyDark border dark:border-white/5">
-        <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-brand-orange/15 blur-[80px]" />
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          <div className="space-y-3">
-            <h3 className="text-brand-orange text-xs font-bold uppercase tracking-wider">Our Vision</h3>
-            <p className="text-base md:text-lg leading-relaxed text-slate-100 font-light">
-              To become the global standard platform for blue-collar workforce management, providing workers with verified digital identities, credit histories, and faster payouts.
-            </p>
-          </div>
-          <div className="space-y-3">
-            <h3 className="text-brand-orange text-xs font-bold uppercase tracking-wider">Our Mission</h3>
-            <p className="text-base md:text-lg leading-relaxed text-slate-100 font-light">
-              To empower developers and builders with simple, transparent, and offline-first mobile tools that eliminate operational friction and ensure fair, accurate wages for every worker.
-            </p>
-          </div>
         </div>
-      </section>
 
-      {/* Future Roadmap Timeline */}
-      <section className="space-y-8 py-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-brand-navy dark:text-white">Future Roadmap</h2>
-        <div className="relative max-w-3xl mx-auto pl-6 border-l-2 border-brand-orange/30 space-y-8">
-          {roadmapItems.map((item, idx) => (
-            <div key={idx} className="relative group">
-              {/* Dot */}
-              <div className="absolute -left-[31px] top-1.5 w-4.5 h-4.5 rounded-full bg-white dark:bg-brand-navyDeep border-2 border-brand-orange transition-all duration-300 group-hover:scale-125" />
-              <div className="space-y-1.5">
-                <span className="text-xs font-semibold text-brand-orange">{item.date}</span>
-                <h3 className="font-bold text-lg text-brand-navy dark:text-white group-hover:text-brand-orange transition">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-gray-500 dark:text-slate-400 leading-relaxed">
-                  {item.desc}
-                </p>
+        {/* What is Haajari */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-28">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="space-y-6 text-left"
+          >
+            <h2 className="text-2xl md:text-3xl font-extrabold text-brand-navy dark:text-white tracking-tight">
+              What is Haajari App?
+            </h2>
+            <p className="text-gray-600 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+              Haajari App is a mobile-first construction management and workforce attendance tool designed to help developers, builders, and contractors track site activities effortlessly. 
+            </p>
+            <p className="text-gray-600 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+              By removing traditional paper diaries, Haajari registers geofenced check-ins, calculates salaries, registers material requests, and lets supervisors communicate in local dialects via an offline-first mobile sync model.
+            </p>
+            <div className="pt-2">
+              <Link to="/features" className="btn-primary inline-flex">
+                <span>Explore Features</span>
+                <HiArrowRight />
+              </Link>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="h-[300px] sm:h-[400px] rounded-3xl bg-gradient-to-br from-brand-orange/20 to-blue-500/10 border border-brand-orange/10 dark:border-white/5 flex items-center justify-center p-8 relative overflow-hidden"
+          >
+            {/* Visual compositions */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-brand-orange/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="z-10 flex flex-col items-center gap-4 text-center">
+              <span className="w-16 h-16 rounded-2xl bg-brand-orange text-white flex items-center justify-center text-3xl font-extrabold shadow-lg shadow-brand-orange/30">
+                H
+              </span>
+              <div className="flex gap-2">
+                <span className="bg-white/90 dark:bg-white/10 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">👷 Attendance</span>
+                <span className="bg-white/90 dark:bg-white/10 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">📍 Geofence</span>
+                <span className="bg-white/90 dark:bg-white/10 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">🤖 AI Assist</span>
               </div>
             </div>
-          ))}
+          </motion.div>
         </div>
-      </section>
 
-      {/* Technology Stack Grid */}
-      <section className="space-y-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-center text-brand-navy dark:text-white">
-          Under the Hood: Technology Stack
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {techStack.map((tech, idx) => {
-            const Icon = tech.icon;
-            return (
-              <div key={idx} className="glass-card p-6 rounded-2xl flex items-start gap-4">
-                <div className={`p-3 rounded-xl ${tech.color} shrink-0`}>
-                  <Icon className="w-5.5 h-5.5 text-brand-navy dark:text-brand-orange" />
+        {/* Problems We Solve */}
+        <div className="mb-28 text-center">
+          <span className="section-badge mb-3">Problems Solved</span>
+          <h2 className="section-heading mb-12 text-brand-navy dark:text-white">Why We Built Haajari</h2>
+          
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {problems.map((prob) => (
+              <motion.div
+                key={prob.id}
+                variants={itemVariants}
+                className="feature-card text-left"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-brand-orange/10 text-brand-orange flex items-center justify-center mb-6">
+                  <prob.icon className="w-6 h-6" />
                 </div>
-                <div className="space-y-1">
-                  <h3 className="font-semibold text-sm md:text-base text-gray-800 dark:text-white">
-                    {tech.name}
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">
-                    {tech.desc}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+                <h3 className="text-lg font-bold text-brand-navy dark:text-white mb-2">{prob.title}</h3>
+                <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed">{prob.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </section>
+
+        {/* Mission & Vision */}
+        <div className="bg-brand-navy dark:bg-brand-navyDark text-white rounded-3xl p-10 md:p-16 mb-28 grid grid-cols-1 lg:grid-cols-2 gap-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-orange/5 rounded-full blur-[100px] pointer-events-none"></div>
+          
+          <div className="space-y-4 text-left">
+            <span className="text-[10px] font-bold tracking-widest text-brand-orange uppercase">Our Mission</span>
+            <h3 className="text-2xl font-extrabold leading-tight">To empower builders with simple, transparent, offline-first tools that ensure fair records for every worker.</h3>
+            <p className="text-slate-400 text-xs leading-relaxed max-w-lg">
+              We design software specifically for the rugged field conditions of construction sites. Our interface operates effortlessly even in low connectivity zones.
+            </p>
+          </div>
+
+          <div className="space-y-4 text-left border-t lg:border-t-0 lg:border-l border-white/10 pt-8 lg:pt-0 lg:pl-12">
+            <span className="text-[10px] font-bold tracking-widest text-brand-orange uppercase">Our Vision</span>
+            <h3 className="text-2xl font-extrabold leading-tight">To become the global standard for blue-collar workforce management and site analytics.</h3>
+            <p className="text-slate-400 text-xs leading-relaxed max-w-lg">
+              We see a future where worker verification, safety log records, material request chains, and daily contractor pay calculations are completely automated and dispute-free.
+            </p>
+          </div>
+        </div>
+
+        {/* Roadmap Timeline */}
+        <div className="mb-28 text-center">
+          <span className="section-badge mb-3">Roadmap</span>
+          <h2 className="section-heading mb-16 text-brand-navy dark:text-white">Future Directions</h2>
+          
+          <div className="max-w-4xl mx-auto relative border-l border-gray-200 dark:border-white/10 text-left pl-6 sm:pl-8 space-y-12">
+            {milestones.map((milestone, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="relative"
+              >
+                {/* Timeline dot */}
+                <span className={`absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full border-4 border-brand-grayBg dark:border-brand-navyDeep ${
+                  milestone.status === 'Done' ? 'bg-green-500' : milestone.status === 'Current' ? 'bg-brand-orange animate-pulse' : 'bg-gray-400'
+                }`}></span>
+                
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 mb-1.5">
+                  <span className="text-xs font-extrabold text-brand-orange bg-brand-orange/10 px-2 py-0.5 rounded w-max">
+                    {milestone.quarter}
+                  </span>
+                  <span className="text-xs font-semibold text-gray-400">
+                    Status: {milestone.status}
+                  </span>
+                </div>
+                <h4 className="text-base font-bold text-brand-navy dark:text-white mb-1">{milestone.title}</h4>
+                <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed max-w-2xl">{milestone.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Technology Stack */}
+        <div className="mb-20 text-center">
+          <span className="section-badge mb-3">Technology Stack</span>
+          <h2 className="section-heading mb-12 text-brand-navy dark:text-white">Built on Modern Architecture</h2>
+          
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left"
+          >
+            {techStack.map((tech, idx) => (
+              <motion.div
+                key={idx}
+                variants={itemVariants}
+                className="glass-card p-6 rounded-2xl border border-white/10 hover:border-brand-orange/30 transition duration-300"
+              >
+                <div className="w-10 h-10 rounded-xl bg-brand-orange/15 text-brand-orange flex items-center justify-center mb-4">
+                  <tech.icon className="w-5 h-5" />
+                </div>
+                <h4 className="text-sm font-bold text-brand-navy dark:text-white mb-1">{tech.name}</h4>
+                <p className="text-[11px] text-gray-500 dark:text-slate-400 leading-relaxed">{tech.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="text-center bg-white/50 dark:bg-white/5 border border-gray-100 dark:border-white/5 rounded-3xl p-10 md:p-14 max-w-4xl mx-auto shadow-sm">
+          <h3 className="text-2xl font-extrabold text-brand-navy dark:text-white mb-2">Want to join our journey?</h3>
+          <p className="text-gray-500 dark:text-slate-400 text-xs mb-6 max-w-md mx-auto">
+            Contact us for investment enquiries, developer partnerships, or field trial requests.
+          </p>
+          <Link to="/contact" className="btn-primary inline-flex mx-auto">
+            <span>Get in Touch</span>
+            <HiArrowRight />
+          </Link>
+        </div>
+
+      </div>
     </div>
   );
 };

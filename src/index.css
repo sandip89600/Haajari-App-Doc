@@ -5,15 +5,27 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Outfit', sans-serif;
   }
   
   body {
-    @apply bg-brand-grayBg text-brand-navy transition-colors duration-300 antialiased;
+    @apply bg-white text-brand-navy antialiased;
+    overflow-x: hidden;
   }
 
   body.dark {
     @apply bg-brand-navyDeep text-slate-200;
+  }
+
+  /* Lenis smooth scroll overrides */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
   }
 }
 
@@ -22,39 +34,105 @@
   .glass-card {
     @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-premium;
   }
-
   .dark .glass-card {
     @apply bg-brand-navyDark/80 backdrop-blur-md border border-white/5 shadow-premium-dark;
   }
-
   .glass-card-hover {
     @apply hover:bg-white/95 hover:shadow-premium-hover transition-all duration-300;
   }
-
   .dark .glass-card-hover {
     @apply hover:bg-brand-navyDark/90 hover:shadow-premium-dark-hover transition-all duration-300;
   }
-
   .glass-nav {
-    @apply bg-white/70 backdrop-blur-lg border-b border-gray-100/80;
+    @apply bg-white/70 backdrop-blur-xl border-b border-gray-100/80;
   }
-
   .dark .glass-nav {
-    @apply bg-brand-navyDeep/70 backdrop-blur-lg border-b border-white/5;
+    @apply bg-brand-navyDeep/70 backdrop-blur-xl border-b border-white/5;
   }
 
-  /* Orange Accent Buttons */
+  /* Premium Buttons */
   .btn-primary {
-    @apply bg-brand-orange text-white hover:bg-brand-orange/95 px-6 py-2.5 rounded-full font-medium shadow-sm transition-all hover:scale-105 active:scale-95 duration-200 flex items-center justify-center gap-2;
+    @apply bg-brand-orange text-white hover:bg-brand-orange/90 px-7 py-3 rounded-full font-semibold shadow-lg shadow-brand-orange/20 transition-all hover:scale-105 hover:shadow-xl hover:shadow-brand-orange/30 active:scale-95 duration-300 flex items-center justify-center gap-2 text-sm;
   }
-
   .btn-secondary {
-    @apply bg-brand-navy/10 text-brand-navy hover:bg-brand-navy/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 px-6 py-2.5 rounded-full font-medium transition-all hover:scale-105 active:scale-95 duration-200 flex items-center justify-center gap-2;
+    @apply bg-brand-navy/5 text-brand-navy hover:bg-brand-navy/10 dark:bg-white/10 dark:text-white dark:hover:bg-white/15 px-7 py-3 rounded-full font-semibold transition-all hover:scale-105 active:scale-95 duration-300 flex items-center justify-center gap-2 text-sm;
+  }
+  .btn-outline {
+    @apply border-2 border-brand-navy/20 hover:border-brand-orange text-brand-navy dark:border-white/20 dark:hover:border-brand-orange dark:text-white px-7 py-3 rounded-full font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-sm;
+  }
+  .btn-coming-soon {
+    @apply bg-brand-orange/10 text-brand-orange border border-brand-orange/20 px-7 py-3 rounded-full font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-sm cursor-default;
   }
 
-  .btn-outline {
-    @apply border border-brand-navy/20 hover:border-brand-navy text-brand-navy dark:border-white/20 dark:hover:border-white dark:text-white px-6 py-2.5 rounded-full font-medium transition-all duration-200 flex items-center justify-center gap-2;
+  /* Section styles */
+  .section-heading {
+    @apply font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl text-brand-navy dark:text-white tracking-tight leading-tight;
   }
+  .section-subheading {
+    @apply text-base md:text-lg text-gray-500 dark:text-slate-400 leading-relaxed max-w-2xl;
+  }
+  .section-badge {
+    @apply inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-bold uppercase tracking-widest;
+  }
+
+  /* Feature Card */
+  .feature-card {
+    @apply glass-card p-8 rounded-3xl relative overflow-hidden transition-all duration-500;
+  }
+  .feature-card:hover {
+    @apply shadow-premium-hover -translate-y-1;
+  }
+  .dark .feature-card:hover {
+    @apply shadow-premium-dark-hover;
+  }
+
+  /* Phone Mockup */
+  .phone-mockup {
+    @apply bg-brand-navyDark rounded-[2.5rem] p-3 shadow-2xl;
+  }
+  .phone-mockup-screen {
+    @apply rounded-[2rem] overflow-hidden bg-gray-100 dark:bg-brand-navyDeep;
+  }
+}
+
+/* Scroll reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Counter animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-count {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float 6s ease-in-out 2s infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-orange to-orange-400;
 }
 
 /* Custom Scrollbar */
@@ -62,35 +140,19 @@
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300/80 rounded-full hover:bg-gray-400/80 transition-colors duration-200;
+  @apply bg-gray-300/80 rounded-full hover:bg-gray-400/80;
 }
-
 .dark ::-webkit-scrollbar-thumb {
-  @apply bg-slate-700/80 rounded-full hover:bg-slate-600/80 transition-colors duration-200;
+  @apply bg-slate-700/80 rounded-full hover:bg-slate-600/80;
 }
 
-/* Document Printing Optimization */
+/* Printing */
 @media print {
-  body {
-    background: white !important;
-    color: black !important;
-  }
-  .no-print {
-    display: none !important;
-  }
-  .print-only {
-    display: block !important;
-  }
-  .print-content {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-  }
+  body { background: white !important; color: black !important; }
+  .no-print { display: none !important; }
+  .print-content { width: 100% !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; }
 }

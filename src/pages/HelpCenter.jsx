@@ -25,12 +25,13 @@ const HelpCenter = () => {
   // Sync state with URL params
   useEffect(() => {
     const catId = searchParams.get('category') || docsData[0].id;
-    const artId = searchParams.get('article') || docsData[0].articles[0].id;
+    const artId = searchParams.get('article');
 
     const category = docsData.find(c => c.id === catId);
     if (category) {
       setActiveCategory(category);
-      const article = category.articles.find(a => a.id === artId);
+      const targetArtId = artId || category.articles[0].id;
+      const article = category.articles.find(a => a.id === targetArtId);
       if (article) {
         setActiveArticle(article);
       }

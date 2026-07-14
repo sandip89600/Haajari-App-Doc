@@ -112,7 +112,7 @@ const Contact = () => {
                 <div>
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Phone Support</h4>
                   <p className="text-sm font-semibold text-gray-700 dark:text-slate-200 mt-1">
-                    Support: <a href="tel:+9170582222107" className="hover:text-brand-orange transition">+91 70582 222107</a>
+                    Support: <a href="tel:+917058222107" className="hover:text-brand-orange transition">+91 70582 222107</a>
                   </p>
                   <p className="text-sm font-semibold text-gray-700 dark:text-slate-200">
                     Sales: <a href="tel:+917057942248" className="hover:text-brand-orange transition">+91 70579 42248</a>
@@ -128,8 +128,8 @@ const Contact = () => {
                 <div>
                   <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Email Inquiry</h4>
                   <p className="text-sm font-semibold text-gray-700 dark:text-slate-200 mt-1">
-                    <a href="mailto:info.haajariapp@gmail.com" className="hover:text-brand-orange transition">
-                      info.haajariapp@gmail.com
+                    <a href="mailto:support@haajari.deepitlabs.in" className="hover:text-brand-orange transition">
+                      support@haajari.deepitlabs.in
                     </a>
                   </p>
                 </div>

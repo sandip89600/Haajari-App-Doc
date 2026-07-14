@@ -1,290 +1,532 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { 
-  HiSearch, HiUser, HiCalendar, HiOfficeBuilding, HiUsers, 
-  HiCube, HiDocumentReport, HiQuestionMarkCircle, HiChevronDown, 
-  HiChevronUp, HiArrowRight, HiLightningBolt
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, useInView } from 'framer-motion';
+import {
+  HiFingerPrint, HiOfficeBuilding, HiDocumentReport, HiCurrencyDollar,
+  HiMicrophone, HiViewGrid, HiCamera, HiArrowRight, HiMail,
+  HiCheckCircle, HiUserAdd, HiBriefcase, HiLocationMarker,
+  HiUsers, HiClipboardCheck, HiTrendingUp, HiChartBar, HiSparkles
 } from 'react-icons/hi';
-import { FaBrain } from 'react-icons/fa';
-import { faqData } from '../data/faqData';
-import { blogsData } from '../data/blogsData';
+import { FaBrain, FaGooglePlay, FaApple } from 'react-icons/fa';
+
+/* ──────────────────────────── data ──────────────────────────── */
+
+const features = [
+  { icon: HiFingerPrint,    title: 'Smart Attendance',     desc: 'One-tap check-in with geofencing, photo proof, and offline sync for remote sites.' },
+  { icon: HiOfficeBuilding, title: 'Site Management',      desc: 'Create unlimited sites, assign supervisors, and monitor daily progress in real time.' },
+  { icon: FaBrain,          title: 'AI Assistant',          desc: 'Ask anything — get instant answers, voice commands, and smart workforce insights.' },
+  { icon: HiDocumentReport, title: 'Reports & Analytics',  desc: 'Auto-generated PDF reports, attendance logs, and exportable dashboards.' },
+  { icon: HiCurrencyDollar, title: 'Salary Management',    desc: 'Automated payroll calculations based on attendance, overtime, and advance deductions.' },
+  { icon: HiMicrophone,     title: 'Voice Commands',       desc: 'Hands-free operation with voice-powered attendance marking and site queries.' },
+  { icon: HiViewGrid,       title: 'Multi-Site Dashboard', desc: 'Unified command center across every project, team, and location — at a glance.' },
+  { icon: HiCamera,         title: 'Photo Verification',   desc: 'Identity verification through real-time photo capture — prevent ghost workers.' },
+];
+
+const steps = [
+  { icon: HiUserAdd,        title: 'Create Account',        desc: 'Sign up in seconds with your phone number or email.' },
+  { icon: HiBriefcase,      title: 'Create Company',        desc: 'Set up your company profile with branding and preferences.' },
+  { icon: HiLocationMarker, title: 'Add Sites',             desc: 'Register construction sites with geofenced boundaries.' },
+  { icon: HiUsers,          title: 'Add Workers',           desc: 'Onboard your workforce with role-based access control.' },
+  { icon: HiClipboardCheck, title: 'Mark Attendance',       desc: 'One-tap check-in with photo proof and GPS verification.' },
+  { icon: HiTrendingUp,     title: 'Track Site Progress',   desc: 'Monitor daily logs, material usage, and milestones.' },
+  { icon: HiChartBar,       title: 'Generate Reports',      desc: 'Export PDF reports for attendance, salary, and site analytics.' },
+  { icon: HiSparkles,       title: 'Use AI Assistant',      desc: 'Get smart insights, voice commands, and instant answers.' },
+];
+
+const stats = [
+  { value: 500,   suffix: '+', label: 'Sites Managed' },
+  { value: 10000, suffix: '+', label: 'Workers Tracked' },
+  { value: 99.9,  suffix: '%', label: 'Uptime' },
+  { value: 50,    suffix: '+', label: 'Features' },
+];
+
+/* ──────────────── reusable animation variants ──────────────── */
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+};
+
+/* ──────────────── AnimatedCounter component ──────────────── */
+
+const AnimatedCounter = ({ value, suffix }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) return;
+    const isDecimal = !Number.isInteger(value);
+    const duration = 2000;
+    const steps = 60;
+    const increment = value / steps;
+    let current = 0;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      current = Math.min(current + increment, value);
+      setDisplay(isDecimal ? parseFloat(current.toFixed(1)) : Math.round(current));
+      if (step >= steps) {
+        setDisplay(value);
+        clearInterval(timer);
+      }
+    }, duration / steps);
+
+    return () => clearInterval(timer);
+  }, [isInView, value]);
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      {isInView ? `${display.toLocaleString()}${suffix}` : `0${suffix}`}
+    </span>
+  );
+};
+
+/* ════════════════════════════════════════════════════════════════
+   HOME PAGE COMPONENT
+   ════════════════════════════════════════════════════════════════ */
 
 const Home = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
 
-  // If URL has ?faq=open, open the first FAQ and scroll to it
-  useEffect(() => {
-    if (searchParams.get('faq') === 'open') {
-      setOpenFaqIndex(0);
+  const handleWaitlist = (e) => {
+    e.preventDefault();
+    if (waitlistEmail.trim()) {
+      setWaitlistSubmitted(true);
+      setWaitlistEmail('');
+      setTimeout(() => setWaitlistSubmitted(false), 6000);
     }
-  }, [searchParams]);
-
-  const triggerSearch = () => {
-    window.dispatchEvent(new CustomEvent('open-search'));
-  };
-
-  const toggleFaq = (index) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
-  };
-
-  const quickHelpCards = [
-    { title: 'Login Help', category: 'account', article: 'how-to-login', icon: HiUser, color: 'text-blue-500 bg-blue-50 dark:bg-blue-950/30' },
-    { title: 'Attendance Guide', category: 'attendance', article: 'mark-attendance', icon: HiCalendar, color: 'text-green-500 bg-green-50 dark:bg-green-950/30' },
-    { title: 'Site Management', category: 'site-management', article: 'create-site', icon: HiOfficeBuilding, color: 'text-orange-500 bg-orange-50 dark:bg-orange-950/30' },
-    { title: 'Worker Management', category: 'worker-management', article: 'add-worker', icon: HiUsers, color: 'text-purple-500 bg-purple-50 dark:bg-purple-950/30' },
-    { title: 'AI Assistant', category: 'ai-assistant', article: 'ai-chat', icon: FaBrain, color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/30' },
-    { title: 'Salary Calculations', category: 'salary', article: 'salary-calculation', icon: HiLightningBolt, color: 'text-yellow-500 bg-yellow-50 dark:bg-yellow-950/30' },
-    { title: 'Reports & Exports', category: 'reports', article: 'export-pdf', icon: HiDocumentReport, color: 'text-teal-500 bg-teal-50 dark:bg-teal-950/30' },
-  ];
-
-  const popularArticles = [
-    { title: 'How to Mark Attendance', category: 'attendance', article: 'mark-attendance', readTime: '3 min read', views: '1.2k views' },
-    { title: 'Photo Verification Setup', category: 'site-management', article: 'photo-verification', readTime: '3 min read', views: '980 views' },
-    { title: 'Salary Calculation Engine', category: 'salary', article: 'salary-calculation', readTime: '3 min read', views: '840 views' },
-    { title: 'Offline Mode & Syncing', category: 'troubleshooting', article: 'internet-issues', readTime: '3 min read', views: '710 views' }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } }
   };
 
   return (
-    <div className="space-y-20">
-      
-      {/* Hero Section */}
-      <section className="relative rounded-3xl overflow-hidden py-16 md:py-24 text-center glass-card px-6">
-        
-        {/* Subtle orange accent glow */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-brand-orange/10 blur-[120px] pointer-events-none" />
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-brand-navy/10 dark:bg-brand-orange/5 blur-[120px] pointer-events-none" />
+    <div className="space-y-0">
 
-        <div className="max-w-3xl mx-auto space-y-6 relative z-10">
+      {/* ─────────────────────────── 1. HERO SECTION ─────────────────────────── */}
+      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+
+        {/* Floating gradient orbs */}
+        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-brand-orange/20 dark:bg-brand-orange/10 blur-[140px] pointer-events-none animate-float-slow" />
+        <div className="absolute bottom-[-15%] right-[-10%] w-[600px] h-[600px] rounded-full bg-brand-navy/15 dark:bg-brand-navy/20 blur-[160px] pointer-events-none animate-float-delayed" />
+        <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full bg-orange-300/10 dark:bg-orange-500/5 blur-[120px] pointer-events-none animate-float" />
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+
+          {/* Badge */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
+            initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-semibold uppercase tracking-wider mb-2"
           >
-            <span className="w-2 h-2 rounded-full bg-brand-orange animate-ping" />
-            <span>Official Help Portal</span>
+            <span className="section-badge">
+              <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
+              Construction SaaS Platform
+            </span>
           </motion.div>
 
+          {/* Headline */}
           <motion.h1
-            initial={{ y: -20, opacity: 0 }}
+            initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-sans font-extrabold text-4xl sm:text-5xl md:text-6xl text-brand-navy dark:text-white leading-tight tracking-tight"
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="section-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl !leading-[1.1]"
           >
-            Welcome to <span className="text-brand-orange">Haajari</span> Support
+            Construction Management,{' '}
+            <span className="gradient-text">Reimagined.</span>
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
-            initial={{ y: -20, opacity: 0 }}
+            initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed"
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="section-subheading mx-auto text-base sm:text-lg md:text-xl"
           >
-            Everything you need to manage attendance, construction sites, workforce rosters, salaries, and AI voice assistance.
+            Attendance, Site Management, Workforce Tracking, AI&nbsp;Assistant, and Reports&nbsp;— all in one platform.
           </motion.p>
 
-          {/* Interactive Search Bar Triggers Modal */}
+          {/* CTA buttons */}
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
+            initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="max-w-xl mx-auto pt-4"
-          >
-            <div 
-              onClick={triggerSearch}
-              className="flex items-center w-full bg-gray-50 hover:bg-gray-100/80 dark:bg-brand-navyDeep dark:hover:bg-brand-navyDeep/80 border border-gray-200 dark:border-white/10 rounded-2xl py-3.5 px-4 cursor-pointer transition shadow-sm group hover:border-brand-orange/30"
-            >
-              <HiSearch className="w-6 h-6 text-gray-400 mr-3 group-hover:text-brand-orange transition" />
-              <span className="text-gray-400 dark:text-slate-400 text-left text-sm md:text-base flex-1">
-                Search for guides, errors, categories...
-              </span>
-              <span className="hidden sm:inline bg-white dark:bg-brand-navyDark border border-gray-200 dark:border-white/10 text-gray-400 dark:text-slate-500 px-2 py-0.5 rounded shadow-sm text-xs font-mono">
-                Ctrl + /
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Hero CTAs */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-3 pt-6"
+            transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap justify-center gap-4 pt-2"
           >
             <Link to="/help-center" className="btn-primary">
-              Get Started
+              Explore Features
+              <HiArrowRight className="w-4 h-4" />
             </Link>
-            <a href="#quick-help" className="btn-secondary">
-              Browse Guides
+            <a href="#waitlist" className="btn-secondary">
+              Join Waitlist
             </a>
           </motion.div>
         </div>
       </section>
 
-      {/* Quick Help Section */}
-      <section id="quick-help" className="space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="font-sans font-bold text-2xl md:text-3xl text-brand-navy dark:text-white">
-            Quick Help by Category
-          </h2>
-          <p className="text-sm text-gray-400 dark:text-slate-400">
-            Browse through categorized resources to set up your team account.
-          </p>
+      {/* ──────────────── 2. FEATURE SHOWCASE ──────────────── */}
+      <section className="py-24 md:py-32">
+        <div className="text-center space-y-4 mb-16">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <span className="section-badge">Features</span>
+          </motion.div>
+          <motion.h2
+            className="section-heading"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Everything You Need to{' '}
+            <span className="gradient-text">Build Better</span>
+          </motion.h2>
+          <motion.p
+            className="section-subheading mx-auto"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Powerful tools designed for construction teams — from attendance to AI insights.
+          </motion.p>
         </div>
 
-        <motion.div 
-          variants={containerVariants}
+        <motion.div
+          variants={stagger}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4"
+          viewport={{ once: true, margin: '-60px' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {quickHelpCards.map((card, idx) => {
-            const Icon = card.icon;
+          {features.map((f, i) => {
+            const Icon = f.icon;
             return (
-              <motion.div 
-                key={idx} 
-                variants={itemVariants}
-                whileHover={{ y: -5 }}
-                className="glass-card glass-card-hover p-5 rounded-2xl flex flex-col items-center text-center cursor-pointer relative"
-                onClick={() => navigate(`/help-center?category=${card.category}&article=${card.article}`)}
-              >
-                <div className={`p-3.5 rounded-2xl ${card.color} mb-3.5`}>
-                  <Icon className="w-6 h-6 shrink-0" />
+              <motion.div key={i} variants={fadeUp} className="feature-card">
+                {/* Hover glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-brand-orange/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+                <div className="relative z-10 space-y-4">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-orange/10 text-brand-orange flex items-center justify-center">
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-bold text-lg text-brand-navy dark:text-white">{f.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
                 </div>
-                <h3 className="font-semibold text-xs md:text-sm text-brand-navy dark:text-white">
-                  {card.title}
-                </h3>
               </motion.div>
             );
           })}
         </motion.div>
       </section>
 
-      {/* Grid: Popular Articles & Latest Blog Posts */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14">
-        
-        {/* Popular Articles */}
-        <div className="space-y-6">
-          <h2 className="font-sans font-bold text-2xl text-brand-navy dark:text-white">
-            Popular Articles
-          </h2>
-          <div className="space-y-4">
-            {popularArticles.map((art, idx) => (
-              <div 
-                key={idx}
-                onClick={() => navigate(`/help-center?category=${art.category}&article=${art.article}`)}
-                className="glass-card glass-card-hover p-5 rounded-2xl cursor-pointer flex items-center justify-between group"
-              >
-                <div className="space-y-1">
-                  <h3 className="font-semibold text-sm md:text-base text-gray-800 dark:text-white group-hover:text-brand-orange transition">
-                    {art.title}
-                  </h3>
-                  <div className="flex text-xs text-gray-400 gap-3">
-                    <span>{art.readTime}</span>
-                    <span>&bull;</span>
-                    <span>{art.views}</span>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-brand-orange/5 text-brand-orange flex items-center justify-center group-hover:bg-brand-orange group-hover:text-white transition duration-200">
-                  <HiArrowRight className="w-4 h-4" />
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* ──────────────── 3. APP SCREENSHOTS GALLERY ──────────────── */}
+      <section className="py-24 md:py-32 bg-white/50 dark:bg-[#081424]/30 border-y border-gray-100 dark:border-white/5 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+        <div className="text-center space-y-4 mb-16">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <span className="section-badge">App Interface</span>
+          </motion.div>
+          <motion.h2
+            className="section-heading"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            See Haajari App <span className="gradient-text">in Action</span>
+          </motion.h2>
+          <motion.p
+            className="section-subheading mx-auto"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Explore our user-friendly interface designed for supervisors and construction teams.
+          </motion.p>
         </div>
 
-        {/* Latest Blog Updates */}
-        <div className="space-y-6">
-          <h2 className="font-sans font-bold text-2xl text-brand-navy dark:text-white flex items-center justify-between">
-            <span>Latest Updates</span>
-            <Link to="/blog" className="text-sm font-semibold text-brand-orange hover:underline flex items-center gap-1">
-              <span>View all</span>
-              <HiArrowRight className="w-4.5 h-4.5" />
-            </Link>
-          </h2>
-          <div className="space-y-4">
-            {blogsData.slice(0, 2).map((post) => (
-              <div 
-                key={post.id}
-                onClick={() => navigate(`/blog/${post.id}`)}
-                className="glass-card glass-card-hover rounded-2xl overflow-hidden cursor-pointer flex gap-4 p-4 items-center group"
-              >
-                <img 
-                  src={post.image} 
-                  alt={post.title} 
-                  className="w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover shrink-0" 
-                />
-                <div className="space-y-1 flex-1">
-                  <span className="text-[10px] font-bold text-brand-orange bg-brand-orange/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                    {post.category}
-                  </span>
-                  <h3 className="font-semibold text-sm md:text-base text-gray-800 dark:text-white line-clamp-1 group-hover:text-brand-orange transition">
-                    {post.title}
-                  </h3>
-                  <p className="text-xs text-gray-400 dark:text-slate-400 line-clamp-2">
-                    {post.summary}
-                  </p>
+        {/* 8 Screen Card Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-12">
+          {[
+            { name: 'Dashboard', desc: 'Real-time overview of workforce and site stats.', icon: '📊', color: 'from-blue-500/20 to-cyan-500/10' },
+            { name: 'Attendance Screen', desc: 'Tap-to-mark monthly attendance logs.', icon: '📅', color: 'from-emerald-500/20 to-teal-500/10' },
+            { name: 'Site Management', desc: 'Geofenced site boundaries & supervisor roles.', icon: '📍', color: 'from-orange-500/20 to-yellow-500/10' },
+            { name: 'AI Chat', desc: 'Regional language querying for quick calculations.', icon: '🤖', color: 'from-purple-500/20 to-pink-500/10' },
+            { name: 'Reports', desc: 'Daily logs exportable to PDF and Excel.', icon: '📥', color: 'from-indigo-500/20 to-blue-500/10' },
+            { name: 'Worker Profile', desc: 'Complete history, rates, and skill classification.', icon: '👤', color: 'from-teal-500/20 to-green-500/10' },
+            { name: 'Salary Summary', desc: 'Advance logs and automated wage sheets.', icon: '💰', color: 'from-yellow-500/20 to-orange-500/10' },
+            { name: 'Settings Screen', desc: 'Billing details, push alerts, and global access.', icon: '⚙️', color: 'from-slate-500/20 to-zinc-500/10' }
+          ].map((scr, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
+              className="glass-card rounded-2xl p-5 border border-white/5 flex flex-col justify-between hover:border-brand-orange/30 hover:scale-[1.03] transition-all duration-300 text-left cursor-pointer group"
+            >
+              <div className="space-y-3">
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${scr.color} flex items-center justify-center text-xl`}>
+                  {scr.icon}
                 </div>
+                <h4 className="font-bold text-sm text-brand-navy dark:text-white group-hover:text-brand-orange transition-colors">
+                  {scr.name}
+                </h4>
+                <p className="text-[11px] text-gray-500 dark:text-slate-400 leading-relaxed">
+                  {scr.desc}
+                </p>
               </div>
-            ))}
-          </div>
+              
+              <Link 
+                to={`/screenshots?tab=${scr.name}`}
+                className="text-[10px] font-bold text-blue-500 group-hover:text-brand-orange mt-4 flex items-center gap-1"
+              >
+                <span>View Mockup</span>
+                <HiArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
+          ))}
         </div>
 
+        <div className="text-center">
+          <Link to="/screenshots" className="btn-outline inline-flex mx-auto">
+            <span>Explore Screenshot Room</span>
+            <HiArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </section>
 
-      {/* Accordion FAQ Section */}
-      <section id="faq-section" className="space-y-8 py-10">
-        <div className="text-center space-y-2">
-          <h2 className="font-sans font-bold text-2xl md:text-3xl text-brand-navy dark:text-white">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-sm text-gray-400 dark:text-slate-400">
-            Have questions? We have compiled immediate answers below.
-          </p>
+
+      {/* ──────────────── 3. HOW IT WORKS — TIMELINE ──────────────── */}
+      <section className="py-24 md:py-32">
+        <div className="text-center space-y-4 mb-16">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <span className="section-badge">How It Works</span>
+          </motion.div>
+          <motion.h2
+            className="section-heading"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Get Started in{' '}
+            <span className="gradient-text">8 Simple Steps</span>
+          </motion.h2>
+          <motion.p
+            className="section-subheading mx-auto"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            From sign-up to AI-powered insights — here&rsquo;s how Haajari transforms your workflow.
+          </motion.p>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-4">
-          {faqData.map((faq, index) => {
-            const isOpen = openFaqIndex === index;
-            return (
-              <div 
-                key={index} 
-                className="glass-card rounded-2xl overflow-hidden transition-all duration-300"
-              >
-                <button
-                  onClick={() => toggleFaq(index)}
-                  className="w-full text-left p-5 flex items-center justify-between text-gray-800 dark:text-white hover:text-brand-orange focus:outline-none transition duration-150"
-                >
-                  <span className="font-semibold text-sm md:text-base">{faq.question}</span>
-                  {isOpen ? <HiChevronUp className="w-5 h-5 text-brand-orange shrink-0" /> : <HiChevronDown className="w-5 h-5 text-gray-400 shrink-0" />}
-                </button>
-                
-                {isOpen && (
-                  <div className="px-5 pb-5 text-sm text-gray-500 dark:text-slate-300 leading-relaxed border-t border-gray-100/50 dark:border-white/5 pt-4">
-                    {faq.answer}
+        <div className="relative max-w-3xl mx-auto">
+          {/* Vertical connecting line */}
+          <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-brand-orange/40 via-brand-orange/20 to-transparent" />
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            className="space-y-10"
+          >
+            {steps.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <motion.div key={i} variants={fadeUp} className="relative flex items-start gap-6 md:gap-8">
+                  {/* Number circle */}
+                  <div className="relative z-10 flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-full bg-brand-orange/10 dark:bg-brand-orange/15 border-2 border-brand-orange/30 flex items-center justify-center">
+                    <span className="text-brand-orange font-extrabold text-base md:text-lg">{i + 1}</span>
                   </div>
-                )}
-              </div>
-            );
-          })}
+
+                  {/* Content */}
+                  <div className="glass-card rounded-2xl p-5 md:p-6 flex-1 group hover:shadow-premium-hover dark:hover:shadow-premium-dark-hover transition-all duration-300">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Icon className="w-5 h-5 text-brand-orange" />
+                      <h3 className="font-bold text-base md:text-lg text-brand-navy dark:text-white">
+                        {step.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-500 dark:text-slate-400 leading-relaxed">{step.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
+      </section>
+
+      {/* ──────────────── 4. STATS COUNTER ──────────────── */}
+      <section className="py-24 md:py-32">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7 }}
+          className="glass-card rounded-3xl p-10 md:p-16"
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-6 text-center">
+            {stats.map((s, i) => (
+              <div key={i} className="space-y-2">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold gradient-text">
+                  <AnimatedCounter value={s.value} suffix={s.suffix} />
+                </div>
+                <p className="text-sm md:text-base text-gray-500 dark:text-slate-400 font-medium">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ──────────────── 5. DOWNLOAD / COMING SOON ──────────────── */}
+      <section id="waitlist" className="py-24 md:py-32">
+        <div className="text-center space-y-4 mb-16">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <span className="section-badge">Download</span>
+          </motion.div>
+          <motion.h2
+            className="section-heading"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Coming Soon to{' '}
+            <span className="gradient-text">Your Device</span>
+          </motion.h2>
+          <motion.p
+            className="section-subheading mx-auto"
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            Be the first to know when Haajari launches on Android and iOS.
+          </motion.p>
+        </div>
+
+        {/* Store cards */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto mb-14"
+        >
+          {/* Android */}
+          <motion.div variants={fadeUp} className="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 to-transparent pointer-events-none" />
+            <div className="relative z-10 space-y-5">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-green-500/10 flex items-center justify-center">
+                <FaGooglePlay className="w-7 h-7 text-green-500" />
+              </div>
+              <h3 className="font-bold text-lg text-brand-navy dark:text-white">Google Play</h3>
+              <div className="inline-flex items-center gap-2 bg-gray-100 dark:bg-white/5 rounded-full px-5 py-2.5">
+                <FaGooglePlay className="w-4 h-4 text-gray-400" />
+                <span className="text-sm font-semibold text-gray-400">Get it on Google Play</span>
+              </div>
+              <div className="btn-coming-soon mx-auto w-fit">Coming Soon</div>
+            </div>
+          </motion.div>
+
+          {/* iOS */}
+          <motion.div variants={fadeUp} className="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none" />
+            <div className="relative z-10 space-y-5">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                <FaApple className="w-8 h-8 text-blue-500" />
+              </div>
+              <h3 className="font-bold text-lg text-brand-navy dark:text-white">App Store</h3>
+              <div className="inline-flex items-center gap-2 bg-gray-100 dark:bg-white/5 rounded-full px-5 py-2.5">
+                <FaApple className="w-4 h-4 text-gray-400" />
+                <span className="text-sm font-semibold text-gray-400">Download on App Store</span>
+              </div>
+              <div className="btn-coming-soon mx-auto w-fit">Coming Soon</div>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Waitlist form */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="max-w-lg mx-auto"
+        >
+          <form onSubmit={handleWaitlist} className="flex gap-3">
+            <div className="relative flex-1">
+              <HiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="email"
+                value={waitlistEmail}
+                onChange={(e) => setWaitlistEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="w-full bg-white dark:bg-brand-navyDark border border-gray-200 dark:border-white/10 rounded-full py-3.5 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:border-transparent text-gray-800 dark:text-white placeholder-gray-400 transition"
+              />
+            </div>
+            <button type="submit" className="btn-primary shrink-0">
+              {waitlistSubmitted ? (
+                <>
+                  <HiCheckCircle className="w-5 h-5" />
+                  Subscribed!
+                </>
+              ) : (
+                'Notify Me'
+              )}
+            </button>
+          </form>
+          {waitlistSubmitted && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center text-sm text-brand-orange font-medium mt-4"
+            >
+              🎉 You&rsquo;re on the list! We&rsquo;ll notify you as soon as we launch.
+            </motion.p>
+          )}
+        </motion.div>
+      </section>
+
+      {/* ──────────────── 6. CTA BANNER ──────────────── */}
+      <section className="py-6 md:py-10">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.7 }}
+          className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-brand-navy to-brand-navyDark px-6 py-16 md:py-20 text-center"
+        >
+          {/* Decorative orbs */}
+          <div className="absolute top-[-30%] left-[-10%] w-[400px] h-[400px] rounded-full bg-brand-orange/10 blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-30%] right-[-10%] w-[400px] h-[400px] rounded-full bg-brand-orange/5 blur-[120px] pointer-events-none" />
+
+          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
+            <h2 className="font-sans font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight leading-tight">
+              Ready to Transform Your{' '}
+              <span className="gradient-text">Workforce Management?</span>
+            </h2>
+            <p className="text-base md:text-lg text-slate-300 max-w-xl mx-auto leading-relaxed">
+              Join hundreds of construction teams already on the waitlist for Haajari.
+            </p>
+            <a
+              href="#waitlist"
+              className="btn-primary inline-flex"
+            >
+              Join Waitlist
+              <HiArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </motion.div>
       </section>
 
     </div>

@@ -40,8 +40,8 @@ app.post('/api/contact', async (req, res) => {
 
   // Compose HTML message layout
   const htmlContent = `
-    <div style="font-family: sans-serif; padding: 20px; color: #1E3A5F; max-width: 600px; border: 1px solid #e2e8f0; border-radius: 12px;">
-      <h2 style="color: #FF6B35; border-bottom: 2px solid #FF6B35; padding-bottom: 10px;">New Help Center Contact Submission</h2>
+    <div style="font-family: sans-serif; padding: 20px; color: #0C1E29; max-width: 600px; border: 1px solid #e2e8f0; border-radius: 12px;">
+      <h2 style="color: #FF5B06; border-bottom: 2px solid #FF5B06; padding-bottom: 10px;">New Help Center Contact Submission</h2>
       <p style="margin-top: 15px;">You have received a new inquiry from the Haajari App Help Center contact form:</p>
       
       <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
@@ -63,8 +63,8 @@ app.post('/api/contact', async (req, res) => {
         </tr>
       </table>
 
-      <div style="margin-top: 20px; padding: 15px; bg-color: #f8fafc; border-radius: 8px; border-left: 4px solid #FF6B35;">
-        <h4 style="margin: 0 0 8px 0; color: #1E3A5F;">Message:</h4>
+      <div style="margin-top: 20px; padding: 15px; bg-color: #f8fafc; border-radius: 8px; border-left: 4px solid #FF5B06;">
+        <h4 style="margin: 0 0 8px 0; color: #0C1E29;">Message:</h4>
         <p style="margin: 0; line-height: 1.5; font-style: italic;">"${message}"</p>
       </div>
 

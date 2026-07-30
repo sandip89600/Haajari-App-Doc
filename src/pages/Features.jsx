@@ -173,8 +173,8 @@ function FeatureCard({ feature, index }) {
         style={{
           background:
             index % 2 === 0
-              ? 'radial-gradient(circle, #FF6B35 0%, transparent 70%)'
-              : 'radial-gradient(circle, #1E3A5F 0%, transparent 70%)',
+              ? 'radial-gradient(circle, #FF5B06 0%, transparent 70%)'
+              : 'radial-gradient(circle, #0C1E29 0%, transparent 70%)',
         }}
       />
 

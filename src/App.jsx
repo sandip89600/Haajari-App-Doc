@@ -17,6 +17,8 @@ import HelpCenter from './pages/HelpCenter';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import QuickHelp from './pages/QuickHelp';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsConditions from './pages/TermsConditions';
 
 // Utilities
 import NotFound from './pages/NotFound';
@@ -47,6 +49,8 @@ function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/quick-help" element={<QuickHelp />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsConditions />} />
 
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />

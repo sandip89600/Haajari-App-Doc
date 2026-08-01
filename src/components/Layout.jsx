@@ -250,6 +250,7 @@ const Layout = ({ children }) => {
                 <li><Link to="/contact" className="hover:text-brand-orange transition">Contact Us</Link></li>
                 <li><Link to="/privacy" className="hover:text-brand-orange transition">Privacy Policy</Link></li>
                 <li><Link to="/terms" className="hover:text-brand-orange transition">Terms & Conditions</Link></li>
+                <li><Link to="/delete-account" className="hover:text-brand-orange transition text-red-400 dark:text-red-400">Delete Account</Link></li>
               </ul>
             </div>
 

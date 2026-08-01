@@ -19,6 +19,7 @@ import BlogPost from './pages/BlogPost';
 import QuickHelp from './pages/QuickHelp';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
+import AccountDeletion from './pages/AccountDeletion';
 
 // Utilities
 import NotFound from './pages/NotFound';
@@ -51,6 +52,7 @@ function App() {
               <Route path="/quick-help" element={<QuickHelp />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsConditions />} />
+              <Route path="/delete-account" element={<AccountDeletion />} />
 
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />

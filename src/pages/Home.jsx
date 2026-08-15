@@ -8,6 +8,8 @@ import {
   HiUsers, HiClipboardCheck, HiTrendingUp, HiChartBar, HiSparkles
 } from 'react-icons/hi';
 import { FaBrain, FaGooglePlay, FaApple } from 'react-icons/fa';
+import LaunchCountdown from '../components/LaunchCountdown';
+import ThreeBackground from '../components/ThreeBackground';
 
 /* ──────────────────────────── data ──────────────────────────── */
 
@@ -111,6 +113,9 @@ const Home = () => {
       {/* ─────────────────────────── 1. HERO SECTION ─────────────────────────── */}
       <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
 
+        {/* 3D Three.js Interactive Particle Canvas */}
+        <ThreeBackground />
+
         {/* Floating gradient orbs */}
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-brand-orange/20 dark:bg-brand-orange/10 blur-[140px] pointer-events-none animate-float-slow" />
         <div className="absolute bottom-[-15%] right-[-10%] w-[600px] h-[600px] rounded-full bg-brand-navy/15 dark:bg-brand-navy/20 blur-[160px] pointer-events-none animate-float-delayed" />
@@ -150,6 +155,9 @@ const Home = () => {
           >
             Attendance, Site Management, Workforce Tracking, AI&nbsp;Assistant, and Reports&nbsp;— all in one platform.
           </motion.p>
+
+          {/* Launch Countdown Component */}
+          <LaunchCountdown id="countdown" />
 
           {/* CTA buttons */}
           <motion.div

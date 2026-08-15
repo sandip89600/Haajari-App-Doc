@@ -30,9 +30,9 @@ function App() {
       <ThemeProvider>
         <Router>
           <Helmet>
-            <title>Haajari App — Construction Management, Reimagined</title>
-            <meta name="description" content="Haajari App is a premium SaaS platform for attendance, site management, workforce tracking, AI assistant, and reports — built for contractors, builders, and supervisors." />
-            <meta name="keywords" content="Haajari App, construction management, smart attendance, site management, workforce tracking, AI assistant, contractor SaaS, builder management, deep IT labs" />
+            <title>Haajari — Construction Management Platform | Launching 11 September 2026</title>
+            <meta name="description" content="Haajari is a next-generation construction management platform for attendance, site management, workforce tracking, AI assistant, and reports — built for contractors and supervisors. Launching 11 September 2026." />
+            <meta name="keywords" content="Haajari, construction management platform, launching 11 September 2026, smart attendance, site management, workforce tracking, AI assistant, contractor SaaS, builder management" />
             <meta name="robots" content="index, follow" />
           </Helmet>
           <Layout>

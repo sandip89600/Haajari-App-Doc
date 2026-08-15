@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { HiSun, HiMoon, HiSearch, HiMenu, HiX, HiChevronRight, HiMail, HiDownload, HiSparkles } from 'react-icons/hi';
 import { useTheme } from '../context/ThemeContext';
 import BackToTop from './BackToTop';
+import { calculateTimeLeft } from './LaunchCountdown';
 
 const Layout = ({ children }) => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -11,7 +12,26 @@ const Layout = ({ children }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLive, setIsLive] = useState(() => calculateTimeLeft().isLive);
   const location = useLocation();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIsLive(calculateTimeLeft().isLive);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleLaunchBadgeClick = (e) => {
+    setIsMobileMenuOpen(false);
+    if (location.pathname === '/') {
+      e.preventDefault();
+      const el = document.getElementById('countdown');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   // Scroll detection for navbar shadow
   useEffect(() => {
@@ -107,11 +127,14 @@ const Layout = ({ children }) => {
                 {isDarkMode ? <HiSun className="w-5 h-5 text-amber-400" /> : <HiMoon className="w-5 h-5" />}
               </button>
 
-              {/* Coming Soon Button */}
+              {/* Launch Status Button */}
               <div className="hidden md:flex">
-                <Link to="/pricing" className="btn-coming-soon py-2 px-5 text-xs">
-                  <HiSparkles className="w-3.5 h-3.5" />
-                  <span>Coming Soon</span>
+                <Link
+                  to="/#countdown"
+                  onClick={handleLaunchBadgeClick}
+                  className="btn-coming-soon py-2 px-4 text-xs font-bold hover:bg-brand-orange/20 hover:border-brand-orange/40 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-brand-orange/20"
+                >
+                  <span>{isLive ? '🚀 Now Live' : '🚀 Launching Soon'}</span>
                 </Link>
               </div>
 
@@ -155,9 +178,12 @@ const Layout = ({ children }) => {
                   </NavLink>
                 ))}
                 <div className="pt-3 border-t border-gray-100 dark:border-white/5">
-                  <Link to="/pricing" className="btn-coming-soon w-full p-3 rounded-2xl flex justify-center">
-                    <HiSparkles className="w-4 h-4 mr-1.5" />
-                    <span>Coming Soon</span>
+                  <Link
+                    to="/#countdown"
+                    onClick={handleLaunchBadgeClick}
+                    className="btn-coming-soon w-full p-3 rounded-2xl flex justify-center font-bold cursor-pointer"
+                  >
+                    <span>{isLive ? '🚀 Now Live' : '🚀 Launching Soon'}</span>
                   </Link>
                 </div>
               </div>

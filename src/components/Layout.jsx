@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiSun, HiMoon, HiSearch, HiMenu, HiX, HiChevronRight, HiMail, HiDownload, HiSparkles } from 'react-icons/hi';
+import { FaGooglePlay } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 import BackToTop from './BackToTop';
 import { calculateTimeLeft } from './LaunchCountdown';
@@ -127,15 +128,17 @@ const Layout = ({ children }) => {
                 {isDarkMode ? <HiSun className="w-5 h-5 text-amber-400" /> : <HiMoon className="w-5 h-5" />}
               </button>
 
-              {/* Launch Status Button */}
+              {/* Launch Status / Play Store Button */}
               <div className="hidden md:flex">
-                <Link
-                  to="/#countdown"
-                  onClick={handleLaunchBadgeClick}
-                  className="btn-coming-soon py-2 px-4 text-xs font-bold hover:bg-brand-orange/20 hover:border-brand-orange/40 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-brand-orange/20"
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.haajari.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-coming-soon py-2 px-4 text-xs font-bold hover:bg-brand-orange/20 hover:border-brand-orange/40 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-brand-orange/20 flex items-center gap-1.5"
                 >
+                  <FaGooglePlay className="w-3.5 h-3.5 text-green-500" />
                   <span>{isLive ? '🚀 Now Live' : '🚀 Launching Soon'}</span>
-                </Link>
+                </a>
               </div>
 
               {/* Mobile Menu Button */}
@@ -178,13 +181,16 @@ const Layout = ({ children }) => {
                   </NavLink>
                 ))}
                 <div className="pt-3 border-t border-gray-100 dark:border-white/5">
-                  <Link
-                    to="/#countdown"
-                    onClick={handleLaunchBadgeClick}
-                    className="btn-coming-soon w-full p-3 rounded-2xl flex justify-center font-bold cursor-pointer"
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.haajari.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="btn-coming-soon w-full p-3 rounded-2xl flex justify-center items-center gap-2 font-bold cursor-pointer"
                   >
+                    <FaGooglePlay className="w-4 h-4 text-green-500" />
                     <span>{isLive ? '🚀 Now Live' : '🚀 Launching Soon'}</span>
-                  </Link>
+                  </a>
                 </div>
               </div>
             </motion.div>

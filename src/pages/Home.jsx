@@ -7,7 +7,7 @@ import {
   HiCheckCircle, HiUserAdd, HiBriefcase, HiLocationMarker,
   HiUsers, HiClipboardCheck, HiTrendingUp, HiChartBar, HiSparkles
 } from 'react-icons/hi';
-import { FaBrain, FaGooglePlay, FaApple } from 'react-icons/fa';
+import { FaBrain, FaGooglePlay } from 'react-icons/fa';
 import LaunchCountdown from '../components/LaunchCountdown';
 import ThreeBackground from '../components/ThreeBackground';
 
@@ -166,20 +166,19 @@ const Home = () => {
             transition={{ duration: 0.7, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap justify-center gap-4 pt-2"
           >
-            <Link to="/features" className="btn-primary">
+            <a 
+              href="https://play.google.com/store/apps/details?id=com.haajari.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+            >
+              <FaGooglePlay className="w-4 h-4" />
+              <span>Get App on Play Store</span>
+            </a>
+            <Link to="/features" className="btn-secondary">
               Explore Features
               <HiArrowRight className="w-4 h-4" />
             </Link>
-            <a 
-              href="#waitlist" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="btn-secondary"
-            >
-              Join Waitlist
-            </a>
           </motion.div>
         </div>
       </section>
@@ -401,11 +400,11 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* ──────────────── 5. DOWNLOAD / COMING SOON ──────────────── */}
+      {/* ──────────────── 5. DOWNLOAD ──────────────── */}
       <section id="waitlist" className="py-24 md:py-32">
         <div className="text-center space-y-4 mb-16">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            <span className="section-badge">Download</span>
+            <span className="section-badge">Download App</span>
           </motion.div>
           <motion.h2
             className="section-heading"
@@ -414,8 +413,7 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Coming Soon to{' '}
-            <span className="gradient-text">Your Device</span>
+            Get Haajari on <span className="gradient-text">Google Play</span>
           </motion.h2>
           <motion.p
             className="section-subheading mx-auto"
@@ -424,49 +422,37 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Be the first to know when Haajari launches on Android and iOS.
+            Download the official Haajari App directly for your Android smartphone and start managing your site today.
           </motion.p>
         </div>
 
-        {/* Store cards */}
+        {/* Store card */}
         <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto mb-14"
+          className="max-w-md mx-auto mb-14"
         >
-          {/* Android */}
-          <motion.div variants={fadeUp} className="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-green-500/5 to-transparent pointer-events-none" />
+          {/* Android Google Play Store */}
+          <a
+            href="https://play.google.com/store/apps/details?id=com.haajari.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass-card rounded-3xl p-8 text-center relative overflow-hidden block group hover:border-brand-orange/50 transition-all duration-300 shadow-xl hover:shadow-brand-orange/20 hover:-translate-y-1"
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-green-500/10 via-transparent to-brand-orange/5 pointer-events-none" />
             <div className="relative z-10 space-y-5">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-green-500/10 flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <FaGooglePlay className="w-7 h-7 text-green-500" />
               </div>
-              <h3 className="font-bold text-lg text-brand-navy dark:text-white">Google Play</h3>
-              <div className="inline-flex items-center gap-2 bg-gray-100 dark:bg-white/5 rounded-full px-5 py-2.5">
-                <FaGooglePlay className="w-4 h-4 text-gray-400" />
-                <span className="text-sm font-semibold text-gray-400">Get it on Google Play</span>
+              <h3 className="font-bold text-xl text-brand-navy dark:text-white">Google Play Store</h3>
+              <p className="text-xs text-slate-400">Official Android App</p>
+              <div className="btn-primary mx-auto w-fit px-8 py-3.5 flex items-center gap-2">
+                <FaGooglePlay className="w-4 h-4 text-white" />
+                <span>Get it on Google Play</span>
               </div>
-              <div className="btn-coming-soon mx-auto w-fit">Coming Soon</div>
             </div>
-          </motion.div>
-
-          {/* iOS */}
-          <motion.div variants={fadeUp} className="glass-card rounded-3xl p-8 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none" />
-            <div className="relative z-10 space-y-5">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-500/10 flex items-center justify-center">
-                <FaApple className="w-8 h-8 text-blue-500" />
-              </div>
-              <h3 className="font-bold text-lg text-brand-navy dark:text-white">App Store</h3>
-              <div className="inline-flex items-center gap-2 bg-gray-100 dark:bg-white/5 rounded-full px-5 py-2.5">
-                <FaApple className="w-4 h-4 text-gray-400" />
-                <span className="text-sm font-semibold text-gray-400">Download on App Store</span>
-              </div>
-              <div className="btn-coming-soon mx-auto w-fit">Coming Soon</div>
-            </div>
-          </motion.div>
+          </a>
         </motion.div>
 
         {/* Waitlist form */}

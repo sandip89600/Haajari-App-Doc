@@ -17,7 +17,7 @@ Welcome to Haajari App! Getting started takes less than two minutes. Follow this
 
 ### Step-by-Step Registration
 
-1. **Download the App**: Install Haajari App from the Google Play Store or Apple App Store.
+1. **Download the App**: Install Haajari App directly from the [Google Play Store](https://play.google.com/store/apps/details?id=com.haajari.app).
 2. **Open the App**: Tap the Haajari icon on your device.
 3. **Select Language**: Choose your preferred language (English, Hindi, Marathi, Gujarati, etc.).
 4. **Enter Mobile Number**: Input your 10-digit mobile phone number.

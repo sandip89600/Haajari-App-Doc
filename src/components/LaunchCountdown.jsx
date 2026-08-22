@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiSparkles, HiRocketLaunch, HiClock } from 'react-icons/hi2';
+import { FaGooglePlay } from 'react-icons/fa';
 
 // Launch target: 11 September 2026, 00:00:00 IST (+05:30)
 const LAUNCH_TARGET_ISO = '2026-09-11T00:00:00+05:30';
@@ -129,13 +130,37 @@ const LaunchCountdown = ({ id = 'countdown' }) => {
             <p className="text-slate-300 text-sm sm:text-base max-w-lg mx-auto">
               HAajari is officially live! Start managing your construction sites, workforce attendance, and payroll seamlessly today.
             </p>
+            <div className="pt-4">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.haajari.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mx-auto inline-flex items-center gap-2 px-8 py-3.5"
+              >
+                <FaGooglePlay className="w-5 h-5 text-white" />
+                <span>Get App on Play Store</span>
+              </a>
+            </div>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-            <TimeUnitCard value={timeLeft.days} label="Days" />
-            <TimeUnitCard value={timeLeft.hours} label="Hours" />
-            <TimeUnitCard value={timeLeft.minutes} label="Minutes" />
-            <TimeUnitCard value={timeLeft.seconds} label="Seconds" />
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+              <TimeUnitCard value={timeLeft.days} label="Days" />
+              <TimeUnitCard value={timeLeft.hours} label="Hours" />
+              <TimeUnitCard value={timeLeft.minutes} label="Minutes" />
+              <TimeUnitCard value={timeLeft.seconds} label="Seconds" />
+            </div>
+            <div className="text-center pt-2">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.haajari.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-brand-orange/20 border border-brand-orange/40 text-white text-xs sm:text-sm font-bold hover:bg-brand-orange hover:shadow-lg hover:shadow-brand-orange/30 transition-all duration-300"
+              >
+                <FaGooglePlay className="w-4 h-4 text-green-400" />
+                <span>Available on Google Play Store</span>
+              </a>
+            </div>
           </div>
         )}
 
